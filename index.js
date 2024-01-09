@@ -2,6 +2,8 @@ const TelegramApi = require('node-telegram-bot-api')
 const { gameOptions, againOptions } = require('./options')
 const { commands } = require('./commands')
 
+// const UserModel = require('./models')
+
 const token = '6720032532:AAHA4mRvqFlqzuKP8AAtXqfgPrvVhweQqqI'
 
 const bot = new TelegramApi(token, { polling: true })
@@ -24,26 +26,30 @@ const startGame = async (chatId) => {
   await bot.sendMessage(chatId, 'Guess!', gameOptions)
 }
 
-const start = () => {
+const start = async () => {
   bot.setMyCommands(commands)
 
   bot.on('message', async (msg) => {
     const { text, chat: { id: chatId }, from: { first_name, username } } = msg;
 
-    if (text === '/start') {
-      await bot.sendSticker(chatId, 'https://chpic.su/_data/stickers/v/ViktKobST/ViktKobST_012.webp')
-      return bot.sendMessage(chatId, 'Welcome to Abuzar\'s telegram bot')
-    }
+    try {
+      if (text === '/start') {
+        await bot.sendSticker(chatId, 'https://chpic.su/_data/stickers/v/ViktKobST/ViktKobST_012.webp')
+        return bot.sendMessage(chatId, 'Welcome to Abuzar\'s telegram bot')
+      }
 
-    if (text === '/info') {
-      return bot.sendMessage(chatId, `Your name is ${first_name} (@${username})`)
-    }
+      if (text === '/info') {
+        return bot.sendMessage(chatId, `Your name is ${first_name} (@${username})`)
+      }
 
-    if (text === '/game') {
-      return startGame(chatId)
-    }
+      if (text === '/game') {
+        return startGame(chatId)
+      }
 
-    return bot.sendMessage(chatId, 'I don\'t quite understand you. Could you please try again?')
+      return bot.sendMessage(chatId, 'I don\'t quite understand you. Could you please try again?')
+    } catch (e) {
+      return bot.sendMessage(chatId, 'Something went wrong')
+    }
   })
 
   bot.on('callback_query', async (msg) => {
@@ -55,10 +61,10 @@ const start = () => {
 
     if (data === chats[chatId]) {
       await bot.sendSticker(chatId, 'https://chpic.su/_data/stickers/v/ViktKobST/ViktKobST_020.webp')
-      return bot.sendMessage(chatId, `Congratulations! You guessed the number ${data}`, againOptions)
+      await bot.sendMessage(chatId, `Congratulations! You guessed the number ${data}`, againOptions)
+    } else {
+      await bot.sendMessage(chatId, `That's unfortunate! The actual number was ${chats[chatId]}`, againOptions)
     }
-
-    return bot.sendMessage(chatId, `That's unfortunate! The actual number was ${chats[chatId]}`, againOptions)
   })
 }
 
