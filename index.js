@@ -1,5 +1,6 @@
 const TelegramApi = require('node-telegram-bot-api')
 const { gameOptions, againOptions } = require('./options')
+const { commands } = require('./commands')
 
 const token = '6720032532:AAHA4mRvqFlqzuKP8AAtXqfgPrvVhweQqqI'
 
@@ -24,11 +25,7 @@ const startGame = async (chatId) => {
 }
 
 const start = () => {
-  bot.setMyCommands([
-    { command: '/start', description: 'Initial greeting' },
-    { command: '/info', description: 'Personal info' },
-    { command: '/game', description: 'Game: Guess a number' },
-  ])
+  bot.setMyCommands(commands)
 
   bot.on('message', async (msg) => {
     const { text, chat: { id: chatId }, from: { first_name, username } } = msg;

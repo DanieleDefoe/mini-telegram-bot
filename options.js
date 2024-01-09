@@ -1,5 +1,5 @@
 /** @type {{ inline_keyboard: Array<Array<{ text: any, callback_data: any }>> }} */
-const replyMarkup = {
+const gameMarkup = {
   inline_keyboard: [
     [{ text: '1', callback_data: '1' }, { text: '2', callback_data: '2' }, { text: '3', callback_data: '3' }],
     [{ text: '4', callback_data: '4' }, { text: '5', callback_data: '5' }, { text: '6', callback_data: '6' }],
@@ -8,20 +8,21 @@ const replyMarkup = {
   ]
 }
 
+/** @type {{ inline_keyboard: Array<Array<{ text: any, callback_data: any }>> }} */
+const againMarkup = {
+  inline_keyboard: [
+    [{ text: 'Play again', callback_data: '/again' }]
+  ]
+}
+
 /** @type {{ reply_markup: string }} */
 const gameOptions = {
-  reply_markup: JSON.stringify(replyMarkup)
+  reply_markup: JSON.stringify(gameMarkup)
 }
 
 /** @type {{ reply_markup: string }} */
 const againOptions = {
-  reply_markup: JSON.stringify(
-    {
-      inline_keyboard: [
-        [{ text: 'Play again', callback_data: '/again' }]
-      ]
-    }
-  )
+  reply_markup: JSON.stringify(againMarkup)
 }
 
 module.exports = {
